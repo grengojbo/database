@@ -50,7 +50,12 @@ search(:apps) do |app|
   end
 end
 
-include_recipe "mysql::server"
+if node["mysql"]["type"] == "mysql"
+  include_recipe "mysql::server"
+end
+if node["mysql"]["type"] == "percona"
+  include_recipe "percona-install::server"
+end
 
 connection_info = {:host => "localhost", :username => 'root', :password => node['mysql']['server_root_password']}
 
