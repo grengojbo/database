@@ -26,7 +26,11 @@ class Chef
 
         def load_current_resource
           Gem.clear_paths
-          require 'mysql'
+          begin
+              require 'mysql'
+          rescue LoadError
+              Chef::Log.info("Missing gem 'mysql'")
+          end
           @current_resource = Chef::Resource::Database.new(@new_resource.name)
           @current_resource.database_name(@new_resource.database_name)
           @current_resource
